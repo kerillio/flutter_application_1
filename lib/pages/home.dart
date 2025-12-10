@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   String? _userToDo;
-  List todoList = ['buy milk', 'wash dishes'];
+  List cardList = ['X5Group'];
   
   @override
   Widget build(BuildContext context) {
@@ -18,32 +18,55 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Text('TODO'),
+        title: Text('Card Holder'),
         centerTitle: true,
       ),
       body: ListView.builder(
-          itemCount: todoList.length,
+          itemCount: cardList.length,
           itemBuilder: (BuildContext context, int index) {
             return Dismissible(
-                key: Key(todoList[index]),
+                key: Key(cardList[index]),
                 child: Card(
-                  child: ListTile(
-                      title: Text(todoList[index]),
-                    trailing: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            todoList.removeAt(index);
-                          });
-                        },
-                        icon: Icon(
-                         Icons.delete,
-                         color: Colors.amber,
-                        )),
+                  child: Container(
+                    child: ListTile(
+                      leading: Image( image: AssetImage('assets/${cardList[index]}.png')),
+                      trailing: IconButton(
+                          onPressed: () {
+                            showDialog(context: context, builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Delete?'),
+                                actions: [
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        ElevatedButton(onPressed: () {
+                                          setState(() {
+                                            cardList.removeAt(index);
+                                          });
+                                          Navigator.of(context).pop();
+                                        },
+                                            child: Text('Yes')),
+                                        ElevatedButton(onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                            child: Text('No')),
+
+                                      ])
+
+                                ],
+                              );
+                            });
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.amber,
+                          )),
+                    ),
                   ),
                 ),
               onDismissed: (direction){
                   setState(() {
-                    todoList.removeAt(index);
+                    cardList.removeAt(index);
                   });
               },
             );
@@ -63,7 +86,7 @@ class _HomeState extends State<Home> {
                     actions: [
                       ElevatedButton(onPressed: (){
                         setState(() {
-                          todoList.add(_userToDo);
+                          cardList.add(_userToDo);
                         });
                         Navigator.of(context).pop();
                       }, child: Text('add'))

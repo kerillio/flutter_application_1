@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/pages/home.dart';
 import 'package:flutter_application_1/pages/main_screen.dart';
+import 'package:flutter_application_1/pages/fileCounter.dart';
+import 'package:flutter_application_1/class lib/card.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '/firebase_options.dart';
 
@@ -15,21 +17,10 @@ void main() async {
     routes: {
       '/': (context) => MainScreen(),
       '/cards': (context) => Home(),
+      '/fileDemo': (context) => FlutterDemo(storage: CounterStorage()),
     },
   ));
 }
 
-class Card {
-  Card({
-    required this.name,
-    required this.barCode,
-    required this.qrCode,
-    this.balance
-  });
 
-  String name;
-  Image barCode;
-  Image qrCode;
-  String? balance;
-}
 

@@ -19,3 +19,17 @@ void main() async {
   ));
 }
 
+class Card {
+  Card({
+    required this.name,
+    required this.barCode,
+    required this.qrCode,
+    this.balance
+  });
+
+  String name;
+  Image barCode;
+  Image qrCode;
+  String? balance;
+}
+

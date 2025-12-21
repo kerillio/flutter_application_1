@@ -1,16 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import '/firebase_options.dart';
 
 class Home extends StatefulWidget {
- const Home({Key? key}) : super(key: key);
+ const Home({super.key});
 
  @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
+
+
+  void initFirebase () async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  }
 
   String? _userToDo;
-  List cardList = ['X5Group'];
   
   @override
   Widget build(BuildContext context) {
@@ -21,56 +29,58 @@ class _HomeState extends State<Home> {
         title: Text('Card Holder'),
         centerTitle: true,
       ),
-      body: ListView.builder(
-          itemCount: cardList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Dismissible(
-                key: Key(cardList[index]),
-                child: Card(
-                  child: Container(
-                    child: ListTile(
-                      leading: Image( image: AssetImage('assets/${cardList[index]}.png')),
-                      trailing: IconButton(
-                          onPressed: () {
-                            showDialog(context: context, builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Delete?'),
-                                actions: [
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ElevatedButton(onPressed: () {
-                                          setState(() {
-                                            cardList.removeAt(index);
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                            child: Text('Yes')),
-                                        ElevatedButton(onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                            child: Text('No')),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('card').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot>? snapshot){
+          if (!snapshot!.hasData) return Text ('No data');
+          return ListView.builder(
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Dismissible(
+                  key: Key(snapshot.data?.docs[index].get('card')),
+                  child: Card(
+                    child: Container(
+                      child: ListTile(
+                        leading: Text(snapshot.data?.docs[index].get('card')),
+                        trailing: IconButton(
+                            onPressed: () {
+                              showDialog(context: context, builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Delete?'),
+                                  actions: [
+                                    Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          ElevatedButton(onPressed: () {
+                                            snapshot.data!.docs.removeAt(index);
+                                            Navigator.of(context).pop();
+                                          },
+                                              child: Text('Yes')),
+                                          ElevatedButton(onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                              child: Text('No')),
 
-                                      ])
+                                        ])
 
-                                ],
-                              );
-                            });
-                          },
-                          icon: Icon(
-                            Icons.delete,
-                            color: Colors.amber,
-                          )),
+                                  ],
+                                );
+                              });
+                            },
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.amber,
+                            )),
+                      ),
                     ),
                   ),
-                ),
-              onDismissed: (direction){
-                  setState(() {
-                    cardList.removeAt(index);
-                  });
-              },
-            );
-          }
+                  onDismissed: (direction){
+                    snapshot.data?.docs.removeAt(index);
+                  },
+                );
+              }
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -85,9 +95,10 @@ class _HomeState extends State<Home> {
                     ),
                     actions: [
                       ElevatedButton(onPressed: (){
-                        setState(() {
-                          cardList.add(_userToDo);
-                        });
+
+                        FirebaseFirestore.instance.collection('card').add(
+                            {'card': _userToDo});
+                        
                         Navigator.of(context).pop();
                       }, child: Text('add'))
                     ],

@@ -5,6 +5,20 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
+    return Scaffold(
+          backgroundColor: Colors.grey[200],
+          appBar: AppBar(
+          backgroundColor: Colors.amber,
+          title: Text('Card Holder'),
+          centerTitle: true,
+        ),
+        body: Column(
+          children: [
+            Text('Main screeen', style: TextStyle(color: Colors.black),),
+            ElevatedButton(onPressed: (){
+              Navigator.pushReplacementNamed(context, '/cards');
+            }, child: Text('Перейти далее'))
+          ],
+        )
+    );}
 }

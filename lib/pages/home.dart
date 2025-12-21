@@ -17,6 +17,30 @@ class HomeState extends State<Home> {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
   }
+  
+  void _menuOpen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Menu'),
+            backgroundColor: Colors.amber,
+              centerTitle: true,
+          ),
+          body: Row (
+            children: [
+              ElevatedButton(onPressed: (){
+                Navigator.pop(context);
+                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+              }, child: Text('Main screen')),
+              Padding(padding: EdgeInsets.only(left: 15)),
+              Text('Simple menu')
+            ],
+          )
+        );
+      })
+    );
+  }
 
   String? _userToDo;
   
@@ -28,6 +52,11 @@ class HomeState extends State<Home> {
         backgroundColor: Colors.amber,
         title: Text('Card Holder'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu_outlined),
+            onPressed: _menuOpen,)
+        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('card').snapshots(),

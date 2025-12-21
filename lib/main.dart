@@ -14,7 +14,7 @@ void main() async {
     initialRoute: '/',
     routes: {
       '/': (context) => MainScreen(),
-      '/todo': (context) => Home(),
+      '/cards': (context) => Home(),
     },
   ));
 }

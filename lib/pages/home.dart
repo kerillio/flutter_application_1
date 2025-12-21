@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_application_1/class lib/menuOpen.dart';
 import '/firebase_options.dart';
 
 class Home extends StatefulWidget {
@@ -17,30 +18,7 @@ class HomeState extends State<Home> {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
   }
-  
-  void _menuOpen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Menu'),
-            backgroundColor: Colors.amber,
-              centerTitle: true,
-          ),
-          body: Row (
-            children: [
-              ElevatedButton(onPressed: (){
-                Navigator.pop(context);
-                Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-              }, child: Text('Main screen')),
-              Padding(padding: EdgeInsets.only(left: 15)),
-              Text('Simple menu')
-            ],
-          )
-        );
-      })
-    );
-  }
+
 
   String? _userToDo;
   
@@ -55,7 +33,9 @@ class HomeState extends State<Home> {
         actions: [
           IconButton(
             icon: Icon(Icons.menu_outlined),
-            onPressed: _menuOpen,)
+            onPressed: () {
+              menuOpen(context);
+            },)
         ],
       ),
       body: StreamBuilder(

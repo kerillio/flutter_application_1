@@ -17,7 +17,10 @@ class MainScreen extends StatelessWidget {
             Text('Main screeen', style: TextStyle(color: Colors.black),),
             ElevatedButton(onPressed: (){
               Navigator.pushReplacementNamed(context, '/cards');
-            }, child: Text('Перейти далее'))
+            }, child: Text('Перейти далее')),
+            ElevatedButton(onPressed: (){
+              Navigator.pushReplacementNamed(context, '/fileDemo');
+            }, child: Text('FILE IO'))
           ],
         )
     );}

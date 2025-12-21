@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_application_1/class lib/menuOpen.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -70,10 +71,23 @@ class _FlutterDemoState extends State<FlutterDemo> {
     return widget.storage.writeCounter(_counter);
   }
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reading and Writing Files')),
+      appBar: AppBar(
+          backgroundColor: Colors.amber,
+          title: Text('Card Holder'),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.menu_outlined),
+              onPressed: () {menuOpen(context);},)
+          ],
+      ),
       body: Center(
         child: Text('Button tapped $_counter time${_counter == 1 ? '' : 's'}.'),
       ),
